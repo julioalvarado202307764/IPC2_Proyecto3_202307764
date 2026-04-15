@@ -1,0 +1,22 @@
+# Compilación y binarios de .NET
+[Bb]in/
+[Oo]bj/
+*.dll
+*.exe
+*.pdb
+# Archivos locales de Entorno y Configuración
+appsettings.Development.json
+appsettings.local.json
+.env
+# Visual Studio / Visual Studio Code
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.user
+*.suo
+# Archivos del Sistema Operativo
+.DS_Store
+Thumbs.db

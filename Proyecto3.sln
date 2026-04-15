@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proyecto3_API", "Proyecto3_API\Proyecto3_API.csproj", "{A9189C82-0832-44C5-3FD1-E63D464EE1E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proyecto3_Razor", "Proyecto3_Razor\Proyecto3_Razor.csproj", "{C8485A5D-237B-2842-8E43-D3C33F22FD6D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9189C82-0832-44C5-3FD1-E63D464EE1E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9189C82-0832-44C5-3FD1-E63D464EE1E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9189C82-0832-44C5-3FD1-E63D464EE1E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9189C82-0832-44C5-3FD1-E63D464EE1E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8485A5D-237B-2842-8E43-D3C33F22FD6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8485A5D-237B-2842-8E43-D3C33F22FD6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8485A5D-237B-2842-8E43-D3C33F22FD6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8485A5D-237B-2842-8E43-D3C33F22FD6D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0BF58AB2-AD8E-4E3E-9414-41B6408CBE8C}
+	EndGlobalSection
+EndGlobal
