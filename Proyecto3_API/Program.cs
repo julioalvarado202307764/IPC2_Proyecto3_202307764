@@ -7,6 +7,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// El DataStore DEBE ser Singleton para que los datos no se borren en cada petición
+builder.Services.AddSingleton<Proyecto3_API.Services.DataStoreService>();
+
+// El procesador puede ser transitorio/scoped porque solo hace operaciones
+builder.Services.AddScoped<Proyecto3_API.Services.XmlProcessorService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
