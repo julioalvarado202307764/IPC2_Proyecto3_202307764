@@ -194,5 +194,55 @@ namespace Proyecto3_API.Services
 
             return resultados;
         }
+
+        public (List<string> EtiquetasMeses, List<ResumenBanco> DatosBancos) ObtenerResumenPagos(int mes, int anio)
+        {
+            // 1. Calcular los 3 meses objetivo
+            DateTime mesActual = new DateTime(anio, mes, 1);
+            DateTime mesMedio = mesActual.AddMonths(-1);
+            DateTime mesAntiguo = mesActual.AddMonths(-2);
+
+            // Nombres para las etiquetas del XML (ej. "01/2024", "02/2024", "03/2024")
+            var etiquetas = new List<string> {
+        mesAntiguo.ToString("MM/yyyy"),
+        mesMedio.ToString("MM/yyyy"),
+        mesActual.ToString("MM/yyyy")
+    };
+
+            var resumen = new List<ResumenBanco>();
+
+            // 2. Agrupar y sumar por cada banco existente
+            foreach (var banco in Bancos)
+            {
+                decimal sumaAntiguo = 0, sumaMedio = 0, sumaActual = 0;
+
+                // Filtramos solo los pagos que pertenecen a este banco
+                var pagosBanco = Pagos.Where(p => p.CodigoBanco == banco.Codigo).ToList();
+
+                foreach (var pago in pagosBanco)
+                {
+                    // Convertimos la fecha del pago para evaluar su mes y año
+                    if (DateTime.TryParseExact(pago.Fecha, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime fechaPago))
+                    {
+                        if (fechaPago.Year == mesAntiguo.Year && fechaPago.Month == mesAntiguo.Month)
+                            sumaAntiguo += pago.Valor;
+                        else if (fechaPago.Year == mesMedio.Year && fechaPago.Month == mesMedio.Month)
+                            sumaMedio += pago.Valor;
+                        else if (fechaPago.Year == mesActual.Year && fechaPago.Month == mesActual.Month)
+                            sumaActual += pago.Valor;
+                    }
+                }
+
+                resumen.Add(new ResumenBanco
+                {
+                    NombreBanco = banco.Nombre,
+                    TotalMesAntiguo = sumaAntiguo,
+                    TotalMesMedio = sumaMedio,
+                    TotalMesActual = sumaActual
+                });
+            }
+
+            return (etiquetas, resumen);
+        }
     }
 }
