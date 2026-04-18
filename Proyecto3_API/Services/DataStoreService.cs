@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Proyecto3_API.Models;
+using System;
 
 namespace Proyecto3_API.Services
 {
@@ -127,5 +128,7 @@ namespace Proyecto3_API.Services
             Facturas.Clear();
             Pagos.Clear();
         }
+
+        
     }
 }

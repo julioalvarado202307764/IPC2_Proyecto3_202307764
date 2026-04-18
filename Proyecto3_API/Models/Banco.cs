@@ -1,9 +1,9 @@
 namespace Proyecto3_API.Models
 {
     // Modelo extraído de config.xml
-    public class Cliente
+    public class Banco
     {
-        public string NIT { get; set; }
+        public int Codigo { get; set; }
         public string Nombre { get; set; }
     }
 }
