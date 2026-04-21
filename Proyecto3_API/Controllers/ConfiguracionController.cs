@@ -32,14 +32,10 @@ namespace Proyecto3_API.Controllers
 
             //Usamos el procesador para extraer los datos
             var nuevosClientes = _xmlProcessor.ExtraerClientes(xmlContent);
-            // var nuevosBancos = _xmlProcessor.ExtraerBancos(xmlContent); // Descomentar cuando lo implementes
-
+            var nuevosBancos = _xmlProcessor.ExtraerBancos(xmlContent);
             //Guardamos en memoria y obtenemos los contadores
             var (clientesCreados, clientesActualizados) = _dataStore.ProcesarClientes(nuevosClientes);
-
-            // Simulación temporal para bancos (reemplazar con lógica real de DataStore)
-            int bancosCreados = 0;
-            int bancosActualizados = 0;
+            var (bancosCreados, bancosActualizados) = _dataStore.ProcesarBancos(nuevosBancos); 
 
             //Construimos el XML de respuesta exacto que pide el PDF
             XDocument xmlRespuesta = new XDocument(
