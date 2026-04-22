@@ -139,6 +139,7 @@ namespace Proyecto3_API.Services
             Bancos.Clear();
             Facturas.Clear();
             Pagos.Clear();
+            GuardarDatosEnDisco();
         }
 
         public List<EstadoCuenta> ObtenerEstadosDeCuenta(string nitRequerido = null)
