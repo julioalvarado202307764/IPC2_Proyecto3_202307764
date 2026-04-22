@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Proyecto3_API.Models;
 using System;
+using System.IO;
+using System.Xml.Linq;
 
 namespace Proyecto3_API.Services
 {
@@ -36,7 +38,7 @@ namespace Proyecto3_API.Services
                     creados++;
                 }
             }
-
+            GuardarDatosEnDisco();
             return (creados, actualizados);
         }
 
@@ -64,6 +66,7 @@ namespace Proyecto3_API.Services
                     nuevas++;
                 }
             }
+            GuardarDatosEnDisco();
             return (nuevas, duplicadas, conError);
         }
 
@@ -93,6 +96,7 @@ namespace Proyecto3_API.Services
                     nuevos++;
                 }
             }
+            GuardarDatosEnDisco();
             return (nuevos, duplicados, conError);
         }
 
@@ -116,7 +120,7 @@ namespace Proyecto3_API.Services
                     creados++;
                 }
             }
-
+            GuardarDatosEnDisco();
             return (creados, actualizados);
         }
 
@@ -244,5 +248,55 @@ namespace Proyecto3_API.Services
 
             return (etiquetas, resumen);
         }
+
+        public void GuardarDatosEnDisco()
+        {
+            // 1. Guardar Base de Datos de Configuración (Clientes y Bancos)
+            XDocument dbConfig = new XDocument(
+                new XDeclaration("1.0", "utf-8", null),
+                new XElement("configuracion_db",
+                    new XElement("clientes",
+                        Clientes.Select(c => new XElement("cliente",
+                            new XElement("NIT", c.NIT),
+                            new XElement("nombre", c.Nombre)
+                        ))
+                    ),
+                    new XElement("bancos",
+                        Bancos.Select(b => new XElement("banco",
+                            new XElement("codigo", b.Codigo),
+                            new XElement("nombre", b.Nombre)
+                        ))
+                    )
+                )
+            );
+            dbConfig.Save("DB_Configuracion.xml");
+
+            // 2. Guardar Base de Datos de Transacciones (Facturas y Pagos)
+            XDocument dbTransac = new XDocument(
+                new XDeclaration("1.0", "utf-8", null),
+                new XElement("transacciones_db",
+                    new XElement("facturas",
+                        Facturas.Select(f => new XElement("factura",
+                            new XElement("numeroFactura", f.NumeroFactura),
+                            new XElement("NITcliente", f.NITCliente),
+                            new XElement("fecha", f.Fecha),
+                            new XElement("valor", f.Valor)
+                        ))
+                    ),
+                    new XElement("pagos",
+                        Pagos.Select(p => new XElement("pago",
+                            new XElement("codigoBanco", p.CodigoBanco),
+                            new XElement("fecha", p.Fecha),
+                            new XElement("NITcliente", p.NITCliente),
+                            new XElement("valor", p.Valor)
+                        ))
+                    )
+                )
+            );
+            dbTransac.Save("DB_Transacciones.xml");
+        }
+
+
     }
+
 }
