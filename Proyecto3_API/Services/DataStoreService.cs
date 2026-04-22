@@ -9,12 +9,20 @@ namespace Proyecto3_API.Services
 {
     public class DataStoreService
     {
+        private readonly string _folderPath = "Data";
+        private readonly string _configFileName = "DB_Configuracion.xml";
+        private readonly string _transacFileName = "DB_Transacciones.xml";
         // Nuestras "tablas" en memoria
         public List<Cliente> Clientes { get; private set; } = new List<Cliente>();
         public List<Banco> Bancos { get; private set; } = new List<Banco>();
         public List<Factura> Facturas { get; private set; } = new List<Factura>();
         public List<Pago> Pagos { get; private set; } = new List<Pago>();
-
+        
+        //correr una vez al inicar la API
+        public DataStoreService()
+        {
+            CargarDatosDesdeDisco();
+        }
         // Método para procesar los clientes que vienen del XML
         public (int creados, int actualizados) ProcesarClientes(List<Cliente> nuevosClientes)
         {
@@ -251,52 +259,87 @@ namespace Proyecto3_API.Services
 
         public void GuardarDatosEnDisco()
         {
-            // 1. Guardar Base de Datos de Configuración (Clientes y Bancos)
-            XDocument dbConfig = new XDocument(
-                new XDeclaration("1.0", "utf-8", null),
-                new XElement("configuracion_db",
-                    new XElement("clientes",
-                        Clientes.Select(c => new XElement("cliente",
-                            new XElement("NIT", c.NIT),
-                            new XElement("nombre", c.Nombre)
-                        ))
-                    ),
-                    new XElement("bancos",
-                        Bancos.Select(b => new XElement("banco",
-                            new XElement("codigo", b.Codigo),
-                            new XElement("nombre", b.Nombre)
-                        ))
-                    )
-                )
-            );
-            dbConfig.Save("DB_Configuracion.xml");
+            if (!Directory.Exists(_folderPath))
+            {
+                Directory.CreateDirectory(_folderPath);
+            }
 
-            // 2. Guardar Base de Datos de Transacciones (Facturas y Pagos)
-            XDocument dbTransac = new XDocument(
-                new XDeclaration("1.0", "utf-8", null),
-                new XElement("transacciones_db",
-                    new XElement("facturas",
-                        Facturas.Select(f => new XElement("factura",
-                            new XElement("numeroFactura", f.NumeroFactura),
-                            new XElement("NITcliente", f.NITCliente),
-                            new XElement("fecha", f.Fecha),
-                            new XElement("valor", f.Valor)
-                        ))
-                    ),
-                    new XElement("pagos",
-                        Pagos.Select(p => new XElement("pago",
-                            new XElement("codigoBanco", p.CodigoBanco),
-                            new XElement("fecha", p.Fecha),
-                            new XElement("NITcliente", p.NITCliente),
-                            new XElement("valor", p.Valor)
-                        ))
-                    )
+            // Guardar Configuración
+            XDocument dbConfig = new XDocument(
+                new XElement("configuracion_db",
+                    new XElement("clientes", Clientes.Select(c => new XElement("cliente",
+                    new XElement("NIT", c.NIT),
+                    new XElement("nombre", c.Nombre)))),
+                    new XElement("bancos", Bancos.Select(b => new XElement("banco",
+                    new XElement("codigo", b.Codigo),
+                    new XElement("nombre", b.Nombre))))
                 )
             );
-            dbTransac.Save("DB_Transacciones.xml");
+            dbConfig.Save(Path.Combine(_folderPath, _configFileName));
+
+            // Guardar Transacciones
+            XDocument dbTransac = new XDocument(
+                new XElement("transacciones_db",
+                    new XElement("facturas", Facturas.Select(f =>
+                    new XElement("factura", new XElement("numeroFactura", f.NumeroFactura),
+                    new XElement("NITcliente", f.NITCliente),
+                    new XElement("fecha", f.Fecha),
+                    new XElement("valor", f.Valor)))),
+                    new XElement("pagos", Pagos.Select(p =>
+                    new XElement("pago", new XElement("codigoBanco", p.CodigoBanco),
+                    new XElement("fecha", p.Fecha), new XElement("NITcliente", p.NITCliente),
+                    new XElement("valor", p.Valor))))
+                )
+            );
+            dbTransac.Save(Path.Combine(_folderPath, _transacFileName));
         }
 
+        //cargar los datos al iniciar la API
+        private void CargarDatosDesdeDisco()
+        {
+            string configPath = Path.Combine(_folderPath, _configFileName);
+            string transacPath = Path.Combine(_folderPath, _transacFileName);
 
+            // 1. Cargar Clientes y Bancos
+            if (File.Exists(configPath))
+            {
+                XDocument doc = XDocument.Load(configPath);
+
+                Clientes = doc.Descendants("cliente").Select(c => new Cliente
+                {
+                    NIT = c.Element("NIT")?.Value,
+                    Nombre = c.Element("nombre")?.Value
+                }).ToList();
+
+                Bancos = doc.Descendants("banco").Select(b => new Banco
+                {
+                    Codigo = int.Parse(b.Element("codigo")?.Value ?? "0"),
+                    Nombre = b.Element("nombre")?.Value
+                }).ToList();
+            }
+
+            // 2. Cargar Facturas y Pagos
+            if (File.Exists(transacPath))
+            {
+                XDocument doc = XDocument.Load(transacPath);
+
+                Facturas = doc.Descendants("factura").Select(f => new Factura
+                {
+                    NumeroFactura = f.Element("numeroFactura")?.Value,
+                    NITCliente = f.Element("NITcliente")?.Value,
+                    Fecha = f.Element("fecha")?.Value,
+                    Valor = decimal.Parse(f.Element("valor")?.Value ?? "0")
+                }).ToList();
+
+                Pagos = doc.Descendants("pago").Select(p => new Pago
+                {
+                    CodigoBanco = int.Parse(p.Element("codigoBanco")?.Value ?? "0"),
+                    Fecha = p.Element("fecha")?.Value,
+                    NITCliente = p.Element("NITcliente")?.Value,
+                    Valor = decimal.Parse(p.Element("valor")?.Value ?? "0")
+                }).ToList();
+            }
+        }
     }
 
 }
