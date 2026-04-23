@@ -1,5 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuracion_db>
-  <clientes />
-  <bancos />
+  <clientes>
+    <cliente>
+      <NIT>202307764</NIT>
+      <nombre>Julio Alvarado</nombre>
+    </cliente>
+    <cliente>
+      <NIT>399399-K</NIT>
+      <nombre>Almacén Guatemalteco</nombre>
+    </cliente>
+  </clientes>
+  <bancos>
+    <banco>
+      <codigo>1</codigo>
+      <nombre>Banco Industrial (BI)</nombre>
+    </banco>
+    <banco>
+      <codigo>2</codigo>
+      <nombre>BanRural</nombre>
+    </banco>
+  </bancos>
 </configuracion_db>

@@ -1,0 +1,36 @@
+@page
+@model Proyecto3_Razor.Pages.CargaConfiguracionModel
+@{
+    ViewData["Title"] = "Cargar Configuración";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Cargar Archivo de Configuración</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="archivo" class="form-label">Seleccione el archivo config.xml:</label>
+                            <input class="form-control" type="file" id="archivo" asp-for="ArchivoXml" accept=".xml" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-cloud-upload"></i> Procesar y Cargar Datos
+                        </button>
+                    </form>
+
+                    @if (!string.IsNullOrEmpty(Model.MensajeRespuesta))
+                    {
+                        <div class="alert alert-info mt-4 text-break">
+                            <h5>Respuesta del Servidor:</h5>
+                            <pre>@Model.MensajeRespuesta</pre>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
