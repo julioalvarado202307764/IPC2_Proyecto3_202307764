@@ -1,0 +1,36 @@
+@page
+@model Proyecto3_Razor.Pages.CargaTransaccionesModel
+@{
+    ViewData["Title"] = "Cargar Transacciones";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">Cargar Archivo de Transacciones (Facturas y Pagos)</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="archivo" class="form-label">Seleccione el archivo transac.xml:</label>
+                            <input class="form-control" type="file" id="archivo" asp-for="ArchivoXml" accept=".xml" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100 fw-bold">
+                            <i class="bi bi-file-earmark-arrow-up"></i> Procesar Transacciones
+                        </button>
+                    </form>
+
+                    @if (!string.IsNullOrEmpty(Model.MensajeRespuesta))
+                    {
+                        <div class="alert alert-secondary mt-4 text-break">
+                            <h5>Respuesta del Servidor:</h5>
+                            <pre>@Model.MensajeRespuesta</pre>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
