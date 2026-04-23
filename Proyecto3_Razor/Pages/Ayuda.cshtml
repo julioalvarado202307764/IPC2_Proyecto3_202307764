@@ -1,0 +1,44 @@
+@page
+@model Proyecto3_Razor.Pages.AyudaModel
+@{
+    ViewData["Title"] = "Ayuda y Documentación";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            
+            <div class="card shadow mb-4 border-info">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0"><i class="bi bi-person-badge-fill"></i> Información del Desarrollador</h4>
+                </div>
+                <div class="card-body text-center">
+                    <h2 class="fw-bold mt-2">Julio Alvarado</h2>
+                    <h4 class="text-muted mb-4">Carné: 202307764</h4>
+                    
+                    <ul class="list-group list-group-flush text-start">
+                        <li class="list-group-item"><strong>Curso:</strong> Introducción a la Programación y Computación 2 (IPC2)</li>
+                        <li class="list-group-item"><strong>Proyecto:</strong> Proyecto 3 - Sistema de Control Bancario</li>
+                        <li class="list-group-item"><strong>Tecnologías:</strong> C# .NET 8, API REST, XML, Razor Pages, Bootstrap</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card shadow border-dark">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="bi bi-journal-code"></i> Documentación Oficial</h4>
+                </div>
+                <div class="card-body text-center">
+                    <p class="lead mt-2">
+                        En el repositorio oficial encontrarás el Manual Técnico, el Manual de Usuario y todo el código fuente del proyecto.
+                    </p>
+                    
+                    <a href="https://github.com/julioalvarado202307764/IPC2_Proyecto3_202307764" target="_blank" class="btn btn-lg btn-outline-dark mt-3 fw-bold shadow-sm">
+                        <i class="bi bi-github"></i> Ver Documentación en GitHub
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
