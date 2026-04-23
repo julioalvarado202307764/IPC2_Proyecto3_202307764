@@ -1,35 +1,68 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Inicio";
+    ViewData["Title"] = "Panel de Control";
 }
 
-<div class="text-center mt-5">
-    <h1 class="display-4 fw-bold">Sistema de Control Bancario</h1>
-    <p class="lead">Bienvenido al panel de administración del Proyecto 3 - IPC2.</p>
+<div class="container text-center mt-4 mb-5">
+    <h1 class="display-4 fw-bold text-dark mb-2">Sistema de Control Bancario</h1>
+    <p class="lead text-muted mb-5">Seleccione una opción del panel para administrar el sistema.</p>
 
-    <div class="card shadow-sm mx-auto mt-5 border-danger" style="max-width: 500px;">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> Zona de Peligro</h5>
+    <div class="row justify-content-center g-4 mt-2">
+        <div class="col-md-5 col-lg-4">
+           <a asp-page="/CargaConfiguracion" class="btn btn-primary btn-lg w-100 py-4 shadow fw-bold fs-5 d-flex flex-column align-items-center transition-hover">
+                <i class="bi bi-gear-fill display-5 mb-2"></i>
+                1. Cargar Configuración
+            </a>
         </div>
-        <div class="card-body">
-            <p class="card-text text-muted">
-                Esta acción eliminará todos los clientes, bancos, facturas y pagos del sistema, tanto en memoria como en los archivos físicos. Úselo para iniciar pruebas desde cero.
-            </p>
-            <form method="post">
-                <button type="submit" class="btn btn-outline-danger w-100 fw-bold">
-                    <i class="bi bi-trash3-fill"></i> Limpiar Todos los Datos
-                </button>
-            </form>
+        
+         <div class="col-md-5 col-lg-4">
+            <a asp-page="/CargaTransacciones" class="btn btn-warning btn-lg w-100 py-4 shadow fw-bold fs-5 text-dark d-flex flex-column align-items-center transition-hover">
+                <i class="bi bi-file-earmark-arrow-up-fill display-5 mb-2"></i>
+                2. Cargar Transacciones
+            </a>
         </div>
     </div>
 
-    @if (!string.IsNullOrEmpty(Model.MensajeRespuesta))
-    {
-        <div class="alert alert-info mt-4 mx-auto text-break text-start shadow-sm" style="max-width: 500px;">
-            <h5 class="alert-heading"><i class="bi bi-info-circle-fill"></i> Respuesta del Servidor:</h5>
-            <hr>
-            <pre class="mb-0">@Model.MensajeRespuesta</pre>
+    <div class="row justify-content-center g-4 mt-2">
+        <div class="col-md-5 col-lg-4">
+            <a asp-page="/EstadoCuenta" class="btn btn-success btn-lg w-100 py-4 shadow fw-bold fs-5 d-flex flex-column align-items-center transition-hover">
+                <i class="bi bi-receipt-cutoff display-5 mb-2"></i>
+                3. Estado de Cuenta
+            </a>
         </div>
-    }
+        
+         <div class="col-md-5 col-lg-4">
+            <a asp-page="/ResumenPagos" class="btn btn-info btn-lg w-100 py-4 shadow fw-bold fs-5 text-white d-flex flex-column align-items-center transition-hover" style="background-color: #0dcaf0; border-color: #0dcaf0;">
+                <i class="bi bi-bar-chart-fill display-5 mb-2"></i>
+                4. Gráfica de Pagos
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center g-4 mt-2">
+        <div class="col-md-5 col-lg-4">
+            <a asp-page="/LimpiarDatos" class="btn btn-outline-danger btn-lg w-100 py-4 shadow-sm fw-bold fs-5 d-flex flex-column align-items-center transition-hover">
+                <i class="bi bi-trash3-fill display-5 mb-2"></i>
+                Limpiar Sistema
+            </a>
+        </div>
+        
+         <div class="col-md-5 col-lg-4">
+            <a asp-page="/Ayuda" class="btn btn-secondary btn-lg w-100 py-4 shadow fw-bold fs-5 d-flex flex-column align-items-center transition-hover">
+                <i class="bi bi-info-circle-fill display-5 mb-2"></i>
+                Ayuda y Documentación
+            </a>
+        </div>
+    </div>
 </div>
+
+<style>
+    .transition-hover {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .transition-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+</style>
