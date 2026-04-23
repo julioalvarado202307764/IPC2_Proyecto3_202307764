@@ -11,35 +11,26 @@
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Proyecto3_Razor</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark fw-bold" asp-area="" asp-page="/Index">
-                                <i class="bi bi-house-door-fill"></i> Panel de Control
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
+    <div class="container mt-4">
         <main role="main" class="pb-3">
+            
+            @if (ViewContext.RouteData.Values["page"]?.ToString() != "/Index")
+            {
+                <div class="mb-4">
+                    <a asp-page="/Index" class="btn btn-outline-dark fw-bold shadow-sm rounded-pill px-4">
+                        <i class="bi bi-arrow-left"></i> Volver al Menú Principal
+                    </a>
+                </div>
+            }
+
             @RenderBody()
+            
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Proyecto3_Razor - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <footer class="border-top footer text-muted mt-5">
+        <div class="container text-center py-3">
+            &copy; 2026 - Sistema de Control Bancario - IPC2 (Julio Alvarado)
         </div>
     </footer>
 
