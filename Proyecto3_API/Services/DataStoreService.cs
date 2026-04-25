@@ -17,7 +17,7 @@ namespace Proyecto3_API.Services
         public List<Banco> Bancos { get; private set; } = new List<Banco>();
         public List<Factura> Facturas { get; private set; } = new List<Factura>();
         public List<Pago> Pagos { get; private set; } = new List<Pago>();
-        
+
         //correr una vez al inicar la API
         public DataStoreService()
         {
@@ -53,58 +53,90 @@ namespace Proyecto3_API.Services
         // Método para procesar transacciones (Ejemplo parcial con Facturas)
         public (int nuevas, int duplicadas, int conError) ProcesarFacturas(List<Factura> nuevasFacturas)
         {
-            int nuevas = 0, duplicadas = 0, conError = 0;
+            int nuevas = 0;
+            int duplicadas = 0;
+            int conError = 0;
 
-            foreach (var nueva in nuevasFacturas)
+            foreach (var factura in nuevasFacturas)
             {
-                // Validación de error: Si el Regex dejó el NIT o Fecha vacíos, es inválido
-                if (string.IsNullOrEmpty(nueva.NITCliente) || string.IsNullOrEmpty(nueva.Fecha))
+                // Validar que los datos críticos no vengan vacíos
+                if (string.IsNullOrWhiteSpace(factura.NumeroFactura) || string.IsNullOrWhiteSpace(factura.NITCliente))
                 {
                     conError++;
                     continue;
                 }
 
-                if (Facturas.Any(f => f.NumeroFactura == nueva.NumeroFactura))
+                // validaciones que el cliente exista en la memoria
+                bool clienteExiste = Clientes.Any(c => c.NIT == factura.NITCliente);
+                if (!clienteExiste)
                 {
-                    duplicadas++; // No hay actualizaciones, solo duplicados 
+                    conError++;
+                    continue; // Cliente no existe, la factura tiene error
+                }
+
+                // Validar si la factura ya está registrada (duplicada)
+                if (Facturas.Any(f => f.NumeroFactura == factura.NumeroFactura))
+                {
+                    duplicadas++;
                 }
                 else
                 {
-                    Facturas.Add(nueva);
+                    // Todo correcto, se agrega
+                    Facturas.Add(factura);
                     nuevas++;
                 }
             }
-            GuardarDatosEnDisco();
+
+            if (nuevas > 0) GuardarDatosEnDisco();
+
             return (nuevas, duplicadas, conError);
         }
 
         public (int nuevos, int duplicados, int conError) ProcesarPagos(List<Pago> nuevosPagos)
         {
-            int nuevos = 0, duplicados = 0, conError = 0;
+            int nuevos = 0;
+            int duplicados = 0;
+            int conError = 0;
 
-            foreach (var nuevo in nuevosPagos)
+            foreach (var pago in nuevosPagos)
             {
-                if (string.IsNullOrEmpty(nuevo.NITCliente) || string.IsNullOrEmpty(nuevo.Fecha))
+                // Validar que el NIT no venga vacío
+                if (string.IsNullOrWhiteSpace(pago.NITCliente))
                 {
                     conError++;
                     continue;
                 }
 
-                // Asumimos duplicado si todos los campos críticos son idénticos
-                if (Pagos.Any(p => p.CodigoBanco == nuevo.CodigoBanco &&
-                                   p.NITCliente == nuevo.NITCliente &&
-                                   p.Fecha == nuevo.Fecha &&
-                                   p.Valor == nuevo.Valor))
+                // validaciones que el cliente Y el banco existan en memoria
+                bool clienteExiste = Clientes.Any(c => c.NIT == pago.NITCliente);
+                bool bancoExiste = Bancos.Any(b => b.Codigo == pago.CodigoBanco);
+
+                if (!clienteExiste || !bancoExiste)
+                {
+                    conError++;
+                    continue; // Banco o Cliente falso, el pago tiene error
+                }
+
+                // Validar duplicado (Asumiendo que un pago es duplicado si coinciden todos sus datos)
+                bool esDuplicado = Pagos.Any(p =>
+                    p.CodigoBanco == pago.CodigoBanco &&
+                    p.NITCliente == pago.NITCliente &&
+                    p.Fecha == pago.Fecha &&
+                    p.Valor == pago.Valor);
+
+                if (esDuplicado)
                 {
                     duplicados++;
                 }
                 else
                 {
-                    Pagos.Add(nuevo);
+                    Pagos.Add(pago);
                     nuevos++;
                 }
             }
-            GuardarDatosEnDisco();
+
+            if (nuevos > 0) GuardarDatosEnDisco();
+
             return (nuevos, duplicados, conError);
         }
 

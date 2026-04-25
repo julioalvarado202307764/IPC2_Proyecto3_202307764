@@ -1,5 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <transacciones_db>
-  <facturas />
-  <pagos />
+  <facturas>
+    <factura>
+      <numeroFactura>FAC001</numeroFactura>
+      <NITcliente>A1B2C3</NITcliente>
+      <fecha>01/04/2026</fecha>
+      <valor>1500</valor>
+    </factura>
+    <factura>
+      <numeroFactura>FAC002</numeroFactura>
+      <NITcliente>D4E5F6</NITcliente>
+      <fecha>05/04/2026</fecha>
+      <valor>2300</valor>
+    </factura>
+    <factura>
+      <numeroFactura>FAC003</numeroFactura>
+      <NITcliente>J1K2L3</NITcliente>
+      <fecha>10/04/2026</fecha>
+      <valor>875</valor>
+    </factura>
+    <factura>
+      <numeroFactura>FAC004</numeroFactura>
+      <NITcliente>M4N5O6</NITcliente>
+      <fecha>15/04/2026</fecha>
+      <valor>3200</valor>
+    </factura>
+  </facturas>
+  <pagos>
+    <pago>
+      <codigoBanco>1</codigoBanco>
+      <fecha>02/04/2026</fecha>
+      <NITcliente>A1B2C3</NITcliente>
+      <valor>1500</valor>
+    </pago>
+    <pago>
+      <codigoBanco>2</codigoBanco>
+      <fecha>06/04/2026</fecha>
+      <NITcliente>D4E5F6</NITcliente>
+      <valor>2300</valor>
+    </pago>
+    <pago>
+      <codigoBanco>3</codigoBanco>
+      <fecha>11/04/2026</fecha>
+      <NITcliente>J1K2L3</NITcliente>
+      <valor>875</valor>
+    </pago>
+  </pagos>
 </transacciones_db>
