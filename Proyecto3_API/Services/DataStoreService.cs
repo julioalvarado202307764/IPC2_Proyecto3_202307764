@@ -192,7 +192,7 @@ public List<EstadoCuenta> ObtenerEstadosDeCuenta(string nitRequerido = null)
                 var facturasCliente = Facturas.Where(f => f.NITCliente == cliente.NIT).ToList();
                 foreach (var fac in facturasCliente)
                 {
-                    // 🛠️ CORRECCIÓN 1: Las facturas (cargos) SUMAN a la deuda del cliente
+                    // Las facturas (cargos) SUMAN a la deuda del cliente
                     saldoActual += fac.Valor; 
 
                     // Convertir dd/mm/yyyy a DateTime real para ordenar
@@ -211,7 +211,7 @@ public List<EstadoCuenta> ObtenerEstadosDeCuenta(string nitRequerido = null)
                 var pagosCliente = Pagos.Where(p => p.NITCliente == cliente.NIT).ToList();
                 foreach (var pago in pagosCliente)
                 {
-                    // 🛠️ CORRECCIÓN 2: Los pagos (abonos) RESTAN a la deuda del cliente
+                    // Los pagos (abonos) RESTAN a la deuda del cliente
                     saldoActual -= pago.Valor; 
 
                     // Buscar el nombre del banco para el detalle
@@ -229,7 +229,7 @@ public List<EstadoCuenta> ObtenerEstadosDeCuenta(string nitRequerido = null)
                     });
                 }
                 
-                // 🛠️ CORRECCIÓN 3: OrderBy (Ascendente) para que la fecha más vieja salga primero
+                // OrderBy (Ascendente) para que la fecha más vieja salga primero
                 historial = historial.OrderBy(t => t.FechaOrdenamiento).ToList();
 
                 resultados.Add(new EstadoCuenta
