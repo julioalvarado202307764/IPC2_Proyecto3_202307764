@@ -174,7 +174,7 @@ namespace Proyecto3_API.Services
             GuardarDatosEnDisco();
         }
 
-        public List<EstadoCuenta> ObtenerEstadosDeCuenta(string nitRequerido = null)
+public List<EstadoCuenta> ObtenerEstadosDeCuenta(string nitRequerido = null)
         {
             var resultados = new List<EstadoCuenta>();
 
@@ -192,7 +192,8 @@ namespace Proyecto3_API.Services
                 var facturasCliente = Facturas.Where(f => f.NITCliente == cliente.NIT).ToList();
                 foreach (var fac in facturasCliente)
                 {
-                    saldoActual -= fac.Valor; // Las facturas restan al saldo a favor
+                    // 🛠️ CORRECCIÓN 1: Las facturas (cargos) SUMAN a la deuda del cliente
+                    saldoActual += fac.Valor; 
 
                     // Convertir dd/mm/yyyy a DateTime real para ordenar
                     DateTime.TryParseExact(fac.Fecha, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime fechaParsed);
@@ -210,7 +211,8 @@ namespace Proyecto3_API.Services
                 var pagosCliente = Pagos.Where(p => p.NITCliente == cliente.NIT).ToList();
                 foreach (var pago in pagosCliente)
                 {
-                    saldoActual += pago.Valor; // Los pagos suman al saldo a favor
+                    // 🛠️ CORRECCIÓN 2: Los pagos (abonos) RESTAN a la deuda del cliente
+                    saldoActual -= pago.Valor; 
 
                     // Buscar el nombre del banco para el detalle
                     var banco = Bancos.FirstOrDefault(b => b.Codigo == pago.CodigoBanco);
@@ -226,7 +228,9 @@ namespace Proyecto3_API.Services
                         DetalleAbono = nombreBanco
                     });
                 }
-                historial = historial.OrderByDescending(t => t.FechaOrdenamiento).ToList();
+                
+                // 🛠️ CORRECCIÓN 3: OrderBy (Ascendente) para que la fecha más vieja salga primero
+                historial = historial.OrderBy(t => t.FechaOrdenamiento).ToList();
 
                 resultados.Add(new EstadoCuenta
                 {

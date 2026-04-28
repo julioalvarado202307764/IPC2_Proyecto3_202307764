@@ -4,6 +4,7 @@
     ViewData["Title"] = "Resumen de Pagos";
 }
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="container mt-5">
@@ -34,23 +35,35 @@
             }
             else if (Model.ResumenDatos != null && Model.ResumenDatos.Bancos.Any())
             {
-                <div style="height: 400px; width: 100%;">
-                    <canvas id="graficaBancos"></canvas>
+                <div class="text-end mb-3">
+                    <button onclick="exportarGraficaPDF()" class="btn btn-danger shadow-sm fw-bold">
+                        <i class="bi bi-file-earmark-pdf-fill"></i> Descargar Gráfica en PDF
+                    </button>
+                </div>
+
+                <div id="grafica-pdf" class="p-4 bg-white rounded">
+                    
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold">Reporte de Ingresos por Banco</h3>
+                        <p class="mb-0 text-muted">Período analizado: @Model.ResumenDatos.Fechas.Mes1 a @Model.ResumenDatos.Fechas.Mes3</p>
+                        <p class="mb-0 text-muted">Fecha de emisión: @DateTime.Now.ToString("dd/MM/yyyy")</p>
+                    </div>
+
+                    <div style="height: 400px; width: 100%;">
+                        <canvas id="graficaBancos"></canvas>
+                    </div>
                 </div>
 
                 <script>
-                    // 1. Pasamos los datos de C# a JavaScript
+                    // Configuración de Chart.js
                     const etiquetasFechas = [
                         '@Model.ResumenDatos.Fechas.Mes1', 
                         '@Model.ResumenDatos.Fechas.Mes2', 
                         '@Model.ResumenDatos.Fechas.Mes3'
                     ];
                     
-                    // Serializamos la lista de bancos a formato JSON para que JS la entienda
                     const datosBancos = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ResumenDatos.Bancos));
-
-                    // 2. Preparamos los "datasets" (las barras por cada banco)
-                    const colores = ['#0d6efd', '#fd7e14', '#198754', '#dc3545', '#6c757d']; // Colores estilo Bootstrap
+                    const colores = ['#0d6efd', '#fd7e14', '#198754', '#dc3545', '#6c757d'];
                     
                     const datasetsGrafica = datosBancos.map((banco, index) => {
                         return {
@@ -61,7 +74,6 @@
                         };
                     });
 
-                    // 3. Inicializamos Chart.js
                     const ctx = document.getElementById('graficaBancos').getContext('2d');
                     new Chart(ctx, {
                         type: 'bar',
@@ -90,6 +102,23 @@
                             }
                         }
                     });
+
+                    // 4. Script para generar el PDF de la gráfica
+                    function exportarGraficaPDF() {
+                        const elemento = document.getElementById('grafica-pdf');
+                        
+                        const opciones = {
+                            margin:       0.5,
+                            filename:     'IngresosBancos_M@(Model.Mes)_A@(Model.Anio).pdf',
+                            image:        { type: 'jpeg', quality: 0.98 },
+                            // Forzamos el fondo blanco para que la gráfica no salga transparente
+                            html2canvas:  { scale: 2, backgroundColor: '#ffffff' }, 
+                            // Landscape (horizontal) para que la gráfica tenga mejor proporción
+                            jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+                        };
+
+                        html2pdf().set(opciones).from(elemento).save();
+                    }
                 </script>
             }
             else if (Model.Mes.HasValue)

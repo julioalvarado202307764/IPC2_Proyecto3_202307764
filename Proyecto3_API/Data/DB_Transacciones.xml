@@ -4,8 +4,14 @@
     <factura>
       <numeroFactura>FAC001</numeroFactura>
       <NITcliente>A1B2C3</NITcliente>
-      <fecha>01/04/2026</fecha>
+      <fecha>10/04/2026</fecha>
       <valor>1500</valor>
+    </factura>
+    <factura>
+      <numeroFactura>FAC999</numeroFactura>
+      <NITcliente>A1B2C3</NITcliente>
+      <fecha>01/04/2026</fecha>
+      <valor>500</valor>
     </factura>
     <factura>
       <numeroFactura>FAC002</numeroFactura>
@@ -29,9 +35,9 @@
   <pagos>
     <pago>
       <codigoBanco>1</codigoBanco>
-      <fecha>02/04/2026</fecha>
+      <fecha>15/04/2026</fecha>
       <NITcliente>A1B2C3</NITcliente>
-      <valor>1500</valor>
+      <valor>3000</valor>
     </pago>
     <pago>
       <codigoBanco>2</codigoBanco>
