@@ -24,10 +24,43 @@
 
                     @if (!string.IsNullOrEmpty(Model.MensajeRespuesta))
                     {
-                        <div class="alert alert-secondary mt-4 text-break">
-                            <h5>Respuesta del Servidor:</h5>
-                            <pre>@Model.MensajeRespuesta</pre>
+                        <div class="alert alert-secondary mt-4 text-break shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="mb-0">Respuesta del Servidor:</h5>
+                                
+                                <!-- BOTÓN DE DESCARGA (Estilo oscuro para que resalte) -->
+                                <button type="button" onclick="descargarRespuestaXML()" class="btn btn-dark btn-sm fw-bold">
+                                    <i class="bi bi-download"></i> Descargar XML
+                                </button>
+                            </div>
+                            
+                            <!-- ID AGREGADO AL PRE -->
+                            <pre id="texto-xml-respuesta" class="bg-white p-3 border rounded mb-0">@Model.MensajeRespuesta</pre>
                         </div>
+
+                        <!-- SCRIPT MAGICO PARA DESCARGAR -->
+                        <script>
+                            function descargarRespuestaXML() {
+                                // Obtenemos el texto del XML
+                                const contenidoXml = document.getElementById('texto-xml-respuesta').innerText;
+                                
+                                // Creamos el archivo en memoria
+                                const blob = new Blob([contenidoXml], { type: 'application/xml' });
+                                const url = window.URL.createObjectURL(blob);
+                                
+                                // Forzamos la descarga
+                                const a = document.createElement('a');
+                                a.style.display = 'none';
+                                a.href = url;
+                                // Cambiamos el nombre para que diga Respuesta_Transac_
+                                a.download = 'Respuesta_Transac_' + new Date().getTime() + '.xml'; 
+                                
+                                document.body.appendChild(a);
+                                a.click();
+                                window.URL.revokeObjectURL(url);
+                                document.body.removeChild(a);
+                            }
+                        </script>
                     }
                 </div>
             </div>

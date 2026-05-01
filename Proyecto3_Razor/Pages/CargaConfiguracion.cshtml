@@ -24,10 +24,40 @@
 
                     @if (!string.IsNullOrEmpty(Model.MensajeRespuesta))
                     {
-                        <div class="alert alert-info mt-4 text-break">
-                            <h5>Respuesta del Servidor:</h5>
-                            <pre>@Model.MensajeRespuesta</pre>
+                        <div class="alert alert-info mt-4 text-break shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="mb-0">Respuesta del Servidor:</h5>
+                                
+                                <!-- 1. BOTÓN DE DESCARGA -->
+                                <button type="button" onclick="descargarRespuestaXML()" class="btn btn-primary btn-sm fw-bold">
+                                    <i class="bi bi-download"></i> Descargar XML
+                                </button>
+                            </div>
+                            
+                            <!-- 2. LE PUSIMOS EL ID 'texto-xml-respuesta' AL PRE -->
+                            <pre id="texto-xml-respuesta" class="bg-white p-3 border rounded mb-0">@Model.MensajeRespuesta</pre>
                         </div>
+                        <script>
+                            function descargarRespuestaXML() {
+                                // Obtenemos el texto
+                                const contenidoXml = document.getElementById('texto-xml-respuesta').innerText;
+                                
+                                // Creamos el archivo en memoria
+                                const blob = new Blob([contenidoXml], { type: 'application/xml' });
+                                const url = window.URL.createObjectURL(blob);
+                                
+                                // Forzamos la descarga
+                                const a = document.createElement('a');
+                                a.style.display = 'none';
+                                a.href = url;
+                                a.download = 'Respuesta_Config_' + new Date().getTime() + '.xml'; 
+                                
+                                document.body.appendChild(a);
+                                a.click();
+                                window.URL.revokeObjectURL(url);
+                                document.body.removeChild(a);
+                            }
+                        </script>
                     }
                 </div>
             </div>
